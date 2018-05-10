@@ -77,8 +77,21 @@ class MapaIris(BaseEstimator, ClassifierMixin):
 						menor = np.linalg.norm(entrada - self.pesos[i][j])
 						_xvencedor = i
 						_yvencedor = j
-
+		
 		return([_xvencedor,_yvencedor])
+
+	def _knn(self, x, y, k):
+		labels = []
+		labels.append(self.matriz[x][y])
+		for i in range(k): # camada de vizinhos
+			M = self.matriz[x-k:x+k+1, y-k:y+k+1]
+			(nrows,ncols) = M.shape
+			for xi in range(nrows):
+				for yi in range(ncols):
+					if(M[xi][yi] != -1 and M[xi][yi] not in labels):
+						labels.append(M[xi][yi])
+
+		return(labels)
 
 	# Treinamento dado um dataset de entrada
 	def fit(self, dTreino, saidas=None):		
@@ -96,43 +109,47 @@ class MapaIris(BaseEstimator, ClassifierMixin):
 			_posicao = _posicao + 1
 
 		self._mudaEpoca()
-		return self
+		return(self)
 
-	def decision_function(self, entrada):
+	def decision_function(self, entrada, k=1):
 		menor = np.linalg.norm(entrada - self.pesos[0][0])
-		_xvencedor = 0
-		_yvencedor = 0
+
 		for i in range(self.dimensao):
 			for j in range(self.dimensao):
 				if(menor > np.linalg.norm(entrada - self.pesos[i][j])):
 					menor = np.linalg.norm(entrada - self.pesos[i][j])
 					_xvencedor = i
 					_yvencedor = j
-
-		return(self.matriz[_xvencedor][_yvencedor])
+		
+		return(self._knn(_xvencedor,_yvencedor,k=k))
 
 	# acesso publico a matriz
 	def getMatriz(self):
-		return self.matriz
+		return(self.matriz)
 		
 dados = datasets.load_iris()
 X = preprocessing.scale(dados['data'])
+Y = np.ndarray(shape=(150,3), dtype=int, buffer=np.array([[0 for i in range(3)] for j in range(150)]))
+for i in range(len(Y)):
+	if(dados['target'][i] == 0):
+		Y[i] = np.array([0, 0, 1])
+	elif(dados['target'][i] == 1):
+		Y[i] = np.array([0, 1, 0])
+	elif(dados['target'][i] == 2):
+		Y[i] = np.array([1, 0, 0])
 
 dado_setosa = X[0]
 dado_versicolor = X[50]
 dado_virginica = X[100]
 
 mapa = MapaIris(taxa=.1,dimensao=13,fi0=8,features=4,decaimento=10000)
-mapa = MapaIris(.1, 13, 8, 4, 1000)
-
-som_mll = OneVsRestClassifier(mapa)
 
 kf = KFold(n_splits=10, shuffle=True, random_state=None)
 for iteracao in range(10):
 	print("Iteracao ", iteracao+1,"!")
 	for indices_treino, indices_teste in kf.split(X):
-		som_mll.fit(X[indices_treino], dados['target'][indices_treino])
+		mapa.fit(X[indices_treino], dados['target'][indices_treino])
 
-print(som_mll.decision_function(dado_setosa))
-print(som_mll.decision_function(dado_versicolor))
-print(som_mll.decision_function(dado_virginica))
+print(mapa.decision_function(dado_setosa))
+print(mapa.decision_function(dado_versicolor))
+print(mapa.decision_function(dado_virginica))
