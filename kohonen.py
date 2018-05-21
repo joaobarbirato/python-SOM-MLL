@@ -140,8 +140,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 				
 			if(v == []):
 				return None
-			#print(v)
-			#print(np.asarray(self.mapeadosNeuronios[x,y]))
+			
 			out = self._somaEMedia(v)
 			for i in range(len(out)):
 				if(out[i] >= thr):
