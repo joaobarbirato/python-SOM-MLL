@@ -40,9 +40,6 @@ class Mapa(BaseEstimator, ClassifierMixin):
 		# Decaimento
 
 	# metodos que sao chamados ao completar uma epoca
-	# def _resetMatriz(self):
-	# 	self.matriz = np.array([[-1 for i in range(self.dimensao)] for j in range(self.dimensao)])
-
 	def _atualizaTaxa(self):
 		self.taxa = self.taxa * np.exp(-self.epoca/self.decaimento)
 
@@ -99,6 +96,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 		self._mudaEpoca()
 		return self
 
+	# funcao de treino
 	def decision_function(self, entrada, k=1, thr=0, vizinhos=True):
 		menor = np.linalg.norm(entrada - self.pesos[0][0])
 		x = 0
@@ -148,3 +146,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 				else:
 					out[i] = 0
 			return out
+
+	# retorna numero de instancias mapeadas
+	def get_n_inst(self):
+		return self.iMapeados
