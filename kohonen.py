@@ -97,7 +97,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 		return self
 
 	# funcao de treino
-	def decision_function(self, entrada, k=1, thr=0, vizinhos=True):
+	def decision_function(self, entrada, k=1, thr=0.5, vizinhos=True):
 		menor = np.linalg.norm(entrada - self.pesos[0][0])
 		x = 0
 		y = 0
@@ -122,7 +122,8 @@ class Mapa(BaseEstimator, ClassifierMixin):
 			for i in range(len(vTotal)):
 				vSM.append(self._somaEMedia(vTotal[i]))
 
-			out = preprocessing.scale(self._somaEMedia(vSM))
+			#out = preprocessing.scale(self._somaEMedia(vSM))#
+			out = self._somaEMedia(vSM)
 			for i in range(len(out)):
 				if(out[i] >= thr):
 					out[i] = 1
