@@ -25,7 +25,7 @@ with open('resultados/'+str(date.today())+'_resultado.csv', 'w') as tabela:
                     x, y = make_multilabel_classification(n_samples=n_exemplos,n_features=n_atributos, n_classes=n_classes)
                     x = scale(x)
                     for n_dimensoes in lista_n_dimensoes:
-                        som = Mapa(taxa=.1,dimensao=23,fi0=8,features=n_atributos,decaimento=10000, nclasses=n_classes)
+                        som = Mapa(taxa=.1,dimensao=n_dimensoes,fi0=8,features=n_atributos,decaimento=10000, nclasses=n_classes)
                         [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val)
                         row = {
                             'usa_vizinhos': bool_val,
