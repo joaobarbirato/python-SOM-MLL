@@ -14,7 +14,7 @@ lista_n_classes     =   [  3,   5,  10]
 lista_n_dimensoes   =   [ 10,  20,  25]
 
 
-with open('resultados/'+str(date.today())+'_resultado.csv', 'w') as tabela:
+with open('resultados/'+str(date.today())+'_2_resultado.csv', 'w') as tabela:
     writer = csv.DictWriter(tabela, fieldnames=['usa_vizinhos','n_dimensoes', 'n_classes', 'n_atributos', 'n_exemplos','precisao','cobertura','medida_f'])
     writer.writeheader()
     t0 = clock()
