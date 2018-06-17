@@ -2,7 +2,7 @@ import csv
 import os
 
 
-with open(str(os.getcwd()) + '/resultados/2018-06-14_resultado.csv','r') as arq_leitura:
+with open(str(os.getcwd()) + '/resultados/2018-06-16_2_resultado.csv','r') as arq_leitura:
     reader = csv.reader(arq_leitura)
     dados = {
                 'nao_vizinhos': 0,
