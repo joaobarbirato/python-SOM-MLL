@@ -10,7 +10,7 @@ def precision(y_vdd,y_prev):
     return soma/(S*T)
 
 def recall(y_vdd,y_prev):
-    S = len(y_prev)
+    S = len(y_vdd)
     T = len(y_prev[0])
     soma = 0
     for i in range(S):
