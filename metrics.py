@@ -13,8 +13,10 @@ def precision(y_vdd,y_prev):
         for j in range(T):
             if y_prev[i][j] == 1:
                 card_classes_prev += 1
-
-        soma += card_intersec / card_classes_prev
+        try:
+            soma += card_intersec / card_classes_prev
+        except ZeroDivisionError:
+            soma += 0
             
     return soma/S
 
@@ -33,7 +35,10 @@ def recall(y_vdd,y_prev):
             if y_vdd[i][j] == 1:
                 card_classes_vdd += 1
 
-        soma += card_intersec / card_classes_vdd
+        try:
+            soma += card_intersec / card_classes_vdd
+        except ZeroDivisionError:
+            soma += 0
             
     return soma/S
 

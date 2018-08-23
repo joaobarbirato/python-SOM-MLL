@@ -12,6 +12,6 @@ def train_test_kfold(n_s, s, r_s, mapa, x, y, vizinhos):
         for indices_treino, indices_teste in kf.split(x):
             mapa.fit(x[indices_treino], y[indices_treino])
             for i_teste in indices_teste:
-                y_previsto.append(mapa.decision_function(x[i_teste],vizinhos))
+                y_previsto.append(mapa.decision_function(x[i_teste],vizinhos,thr=0))
                 y_verdadeiro.append(y[i_teste])
     return[y_verdadeiro,y_previsto]
