@@ -122,7 +122,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 			for i in range(len(vTotal)):
 				vSM.append(self._somaEMedia(vTotal[i]))
 
-			#out = preprocessing.scale(self._somaEMedia(vSM))#
+			out = preprocessing.scale(self._somaEMedia(vSM))
 			out = self._somaEMedia(vSM)
 			for i in range(len(out)):
 				if(out[i] >= thr):
@@ -140,6 +140,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 			if(v == []):
 				return None
 			
+			out = preprocessing.scale(self._somaEMedia(vSM))
 			out = self._somaEMedia(v)
 			for i in range(len(out)):
 				if(out[i] >= thr):

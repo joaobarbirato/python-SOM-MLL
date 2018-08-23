@@ -8,7 +8,7 @@ import csv
 from time import clock
 from datetime import date
 
-lista_n_exemplos    =   [150]#, 300, 450]
+lista_n_exemplos    =   [150]
 lista_n_atributos   =   [  5,  15,  30]
 lista_n_classes     =   [  3,   5,  10]
 lista_n_dimensoes   =   [ 10,  20,  25]
