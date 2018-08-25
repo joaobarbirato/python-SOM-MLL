@@ -9,3 +9,15 @@ venv/
 
 # PyCache
 __pycache__/
+
+# resultados
+resultados/
+
+# datasets
+datasets/
+*.arff
+
+# Outros
+*.pdf
+
+
