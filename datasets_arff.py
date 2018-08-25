@@ -27,7 +27,7 @@ for teste in range(3):
         x = scale(np.ndarray([data['data'][i][:-n_classes] for i in range(len(n_exemplos))]))
         y = np.ndarray([data['data'][i][-n_classes:] for i in range(len(n_exemplos))])
 
-        soma_p_base = []
+        soma_p_base = []resultado
         soma_c_base = []
         soma_f_base = []
         soma_p_prop = []
@@ -44,7 +44,7 @@ for teste in range(3):
                     som = Mapa(taxa=taxa,dimensao=n_dimensoes,fi0=8,features=n_atributos,decaimento=decaimento, nclasses=n_classes)
                     [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val)
                     row = {
-                        'usa_vizinhos': bool_val,prop
+                        'usa_vizinhos': bool_val,
                         'n_dimensoes': n_dimensoes,
                         'precisao': precision(y_v, y_p),
                         'cobertura': recall(y_v, y_p),
@@ -67,11 +67,11 @@ for teste in range(3):
             writer = csv.DictWriter(tabela, fieldnames=['usa_vizinhos','n_dimensoes','precisao','cobertura','medida_f'])
             writer.writeheader()
             row = {
-                'soma_p_prop': sum(soma_p_prop)/len(soma_p_prop)
-                'soma_c_prop': sum(soma_c_prop)/len(soma_c_prop)
-                'soma_f_prop': sum(soma_f_prop)/len(soma_f_prop)
-                'soma_p_base': sum(soma_p_base)/len(soma_p_base)
-                'soma_c_base': sum(soma_c_base)/len(soma_c_base)
+                'soma_p_prop': sum(soma_p_prop)/len(soma_p_prop),
+                'soma_c_prop': sum(soma_c_prop)/len(soma_c_prop),
+                'soma_f_prop': sum(soma_f_prop)/len(soma_f_prop),
+                'soma_p_base': sum(soma_p_base)/len(soma_p_base),
+                'soma_c_base': sum(soma_c_base)/len(soma_c_base),
                 'soma_f_base': sum(soma_f_base)/len(soma_f_base)
             }
             writer.writeheader(row)
