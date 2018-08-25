@@ -59,10 +59,11 @@ class Mapa(BaseEstimator, ClassifierMixin):
 	def _somaEMedia(self, vec):
 		soma = [0 for i in range(self.nclasses)]
 		for v in vec:
+			# print(v)
 			soma = soma + v/len(vec)
 		# for i in range(self.nclasses):
 		# 	soma[i] = soma[i]/len(vec)
-
+		# print(soma)
 		return soma
 	# Classificacao pelo neuronio vencedor utilizando distancia euclidiana
 	def _vencedor(self, entrada):
@@ -97,57 +98,52 @@ class Mapa(BaseEstimator, ClassifierMixin):
 		return self
 
 	# funcao de treino
-	def decision_function(self, entrada, k=1, thr=0.5, vizinhos=True):
-		menor = np.linalg.norm(entrada - self.pesos[0][0])
-		x = 0
-		y = 0
-		for i in range(self.dimensao):
-			for j in range(self.dimensao):
-				if(menor > np.linalg.norm(entrada - self.pesos[i][j])):
-					menor = np.linalg.norm(entrada - self.pesos[i][j])
-					x = i
-					y = j
-
-		if(vizinhos):
-			vTotal = []
-			for i in range(k): # camada de vizinhos
-				for xi in range(x-k-1,x+k):
-					if(xi >= 0):
-						for yi in range(y-k-1,y+k):
-							if(yi >= 0):
-								for l in self.mapeadosNeuronios[xi,yi]:
-									vTotal.append(self.classesMapeadas[l])
-
-			vSM = []
-			for i in range(len(vTotal)):
-				vSM.append(self._somaEMedia(vTotal[i]))
-
-			out = preprocessing.scale(self._somaEMedia(vSM))
-			out = self._somaEMedia(vSM)
-			for i in range(len(out)):
-				if(out[i] >= thr):
-					out[i] = 1
-				else:
-					out[i] = 0
-
-			return out
-		else:
-			v = []
-			for l in self.mapeadosNeuronios[x,y]:
-				for cm in self.classesMapeadas[l]:
-					v.append(cm)
-				
-			if(v == []):
-				return None
+	def decision_function(self, entradas, k=1, thr=0.5, vizinhos=True):
+		p_matrix = [] if(len(entradas) > 1) else None
+		for entrada in entradas:
+			# Select winner neuron from neuron grid
+			menor = np.linalg.norm(entrada - self.pesos[0][0])
+			x = 0
+			y = 0
+			for i in range(self.dimensao):
+				for j in range(self.dimensao):
+					if(menor > np.linalg.norm(entrada - self.pesos[i][j])):
+						menor = np.linalg.norm(entrada - self.pesos[i][j])
+						x = i
+						y = j
 			
-			out = preprocessing.scale(self._somaEMedia(vSM))
-			out = self._somaEMedia(v)
-			for i in range(len(out)):
-				if(out[i] >= thr):
-					out[i] = 1
-				else:
-					out[i] = 0
-			return out
+			
+			if(vizinhos): # proposto
+				vTotal = []
+				for i in range(k): # camada de vizinhos
+					for xi in range(x-k-1,x+k):
+						if(xi >= 0):
+							for yi in range(y-k-1,y+k):
+								if(yi >= 0):
+									for l in self.mapeadosNeuronios[xi,yi]: # Get training instances mapped to winner neuron
+										vTotal.append(self.classesMapeadas[l])
+
+				vSM = []
+				for i in range(len(vTotal)):
+					vSM.append(self._somaEMedia(vTotal[i]))
+
+			else: # baseline
+				vSM = []
+				for l in self.mapeadosNeuronios[x,y]: # Get training instances mapped to winner neuron
+					for cm in self.classesMapeadas[l]:
+						vSM.append(cm) 
+				if(vSM == []):
+					return None
+					
+			vSM = self._somaEMedia(vSM) # Get prototype vector
+			p_matrix.append(vSM) # Associate prototype to instance
+			
+		p_matrix = preprocessing.scale(p_matrix)
+		for i in range(len(p_matrix)):
+			for j in range(len(p_matrix[0])):
+				p_matrix[i][j] = 1 if p_matrix[i][j] >= thr else 0
+
+		return p_matrix
 
 	# retorna numero de instancias mapeadas
 	def get_n_inst(self):

@@ -7,11 +7,15 @@ def train_test_kfold(n_s, s, r_s, mapa, x, y, vizinhos):
     kf = KFold(n_splits=n_s, shuffle=s, random_state=r_s)
     y_previsto = []
     y_verdadeiro = []
-    for iteracao in range(10):
-        print("Iteracao ", iteracao+1,"!")
-        for indices_treino, indices_teste in kf.split(x):
-            mapa.fit(x[indices_treino], y[indices_treino])
-            for i_teste in indices_teste:
-                y_previsto.append(mapa.decision_function(x[i_teste],vizinhos,thr=0))
-                y_verdadeiro.append(y[i_teste])
+    iteracao = 1
+    for indices_treino, indices_teste in kf.split(x):
+        print("Iteracao ", iteracao, " !")
+        mapa.fit(x[indices_treino], y[indices_treino])
+        y_previsto_i = mapa.decision_function(entradas=x[indices_teste],thr=0,vizinhos=False)
+        y_verdadeiro_i = y[indices_teste]
+        if y_previsto_i is not None:
+            [y_previsto.append(e) for e in y_previsto_i]
+        if y_verdadeiro_i is not None:
+            [y_verdadeiro.append(e) for e in y_verdadeiro_i]
+        iteracao += 1
     return[y_verdadeiro,y_previsto]
