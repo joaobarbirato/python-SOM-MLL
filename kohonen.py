@@ -137,14 +137,15 @@ class Mapa(BaseEstimator, ClassifierMixin):
 					
 			vSM = self._somaEMedia(vSM) # Get prototype vector
 			p_matrix.append(vSM) # Associate prototype to instance
-			
-		p_matrix = preprocessing.scale(p_matrix)
+
+		scaler = preprocessing.MinMaxScaler(copy=True, feature_range=(-1,1))
+		p_matrix = scaler.transform(p_matrix)
 		for i in range(len(p_matrix)):
 			for j in range(len(p_matrix[0])):
 				p_matrix[i][j] = 1 if p_matrix[i][j] >= thr else 0
 
 		return p_matrix
-
+	
 	# retorna numero de instancias mapeadas
 	def get_n_inst(self):
 		return self.iMapeados
