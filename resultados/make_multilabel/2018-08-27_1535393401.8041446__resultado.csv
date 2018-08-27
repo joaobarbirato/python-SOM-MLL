@@ -1,0 +1,2 @@
+usa_vizinhos,n_dimensoes,n_classes,n_atributos,n_exemplos,thr,precisao,cobertura,medida_f
+BASELINE,10,3,5,150,0.0,0.4716049382716049,0.46049382716049386,0.46598315755048647
