@@ -139,6 +139,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 			p_matrix.append(vSM) # Associate prototype to instance
 
 		scaler = preprocessing.MinMaxScaler(copy=True, feature_range=(-1,1))
+		scaler.fit(p_matrix)
 		p_matrix = scaler.transform(p_matrix)
 		for i in range(len(p_matrix)):
 			for j in range(len(p_matrix[0])):
