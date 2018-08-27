@@ -26,7 +26,7 @@ with open('resultados/'+str(date.today())+'_2_resultado.csv', 'w') as tabela:
                     x = scale(x)
                     for n_dimensoes in lista_n_dimensoes:
                         som = Mapa(taxa=.1,dimensao=n_dimensoes,fi0=8,features=n_atributos,decaimento=10000, nclasses=n_classes)
-                        [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val)
+                        [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val, thr=0, n_vizinhos=1)
                         row = {
                             'usa_vizinhos': bool_val,
                             'n_dimensoes': n_dimensoes,
