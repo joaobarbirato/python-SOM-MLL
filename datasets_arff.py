@@ -11,8 +11,7 @@ from sklearn.preprocessing import scale
 
 DATASET_NUMEROCLASSES = (
     ('CAL500', 174),
-    ('emotions', 6),
-    ('mediamill', 101)
+    ('emotions', 6)
 )
 
 for dataset, n_classes in DATASET_NUMEROCLASSES:
