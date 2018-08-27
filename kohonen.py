@@ -98,7 +98,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 		return self
 
 	# funcao de treino
-	def decision_function(self, entradas, k=1, thr=0.5, vizinhos=True):
+	def decision_function(self, entradas, k=1, thr=0, vizinhos=True, intervalo_scale=(-1,1)):
 		p_matrix = [] if(len(entradas) > 1) else None
 		for entrada in entradas:
 			# Select winner neuron from neuron grid
@@ -138,7 +138,7 @@ class Mapa(BaseEstimator, ClassifierMixin):
 			vSM = self._somaEMedia(vSM) # Get prototype vector
 			p_matrix.append(vSM) # Associate prototype to instance
 
-		scaler = preprocessing.MinMaxScaler(copy=True, feature_range=(-1,1))
+		scaler = preprocessing.MinMaxScaler(copy=True, feature_range=intervalo_scale)
 		scaler.fit(p_matrix)
 		p_matrix = scaler.transform(p_matrix)
 		for i in range(len(p_matrix)):
