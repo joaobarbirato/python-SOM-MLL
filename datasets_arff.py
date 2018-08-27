@@ -40,7 +40,7 @@ for dataset, n_classes in DATASET_NUMEROCLASSES:
         t0 = clock()
         for bool_val in [False, True]:
             som = Mapa(taxa=taxa,dimensao=n_dimensoes,fi0=8,features=n_atributos,decaimento=decaimento, nclasses=n_classes)
-            [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val,thr=0)
+            [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val,thr=0, n_vizinhos=1)
             row = {
                 'usa_vizinhos': bool_val,
                 'n_dimensoes': n_dimensoes,
