@@ -11,16 +11,14 @@ from datetime import date
 LISTA_N_EXEMPLOS    =   [150]
 LISTA_N_ATRIBUTOS   =   [  5,  15,  30]
 LISTA_N_CLASSES     =   [  3,   5,  10]
-LISTA_N_DIMENSOES   =   [ 10,  20,  25]
-LISTA_INTERVALOS    =   [(-1,1), (0,1)]
+LISTA_N_DIMENSOES   =   [  5,  10,  25]
+LISTA_INTERVALOS    =   [(-1,1)]
 LISTA_N_VIZINHOS    =   [  1,   2,   3]
 
-soma_p_base = []
-soma_c_base = []
-soma_f_base = []
-soma_p_prop = []
-soma_c_prop = []
-soma_f_prop = []
+media_f_base = []
+media_f_prop_k1 = []
+media_f_prop_k2 = []
+media_f_prop_k3 = []
 
 timestamp = time()
 with open('resultados/make_multilabel/' + str(date.today()) + '_' + str(timestamp) + '_' + '_resultado.csv', 'w') as tabela:
@@ -37,47 +35,57 @@ with open('resultados/make_multilabel/' + str(date.today()) + '_' + str(timestam
                     for bool_val in [False, True]:
                         for intervalo in LISTA_INTERVALOS:
                             thr = (intervalo[1]+intervalo[0])/2
-                            [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val, thr=0, n_vizinhos=1, intervalo=intervalo)
-                            row = {
-                                'metodo': "PROPOSTO" if bool_val else "BASELINE",
-                                'n_dimensoes': n_dimensoes,
-                                'n_classes': n_classes,
-                                'n_atributos': n_atributos,
-                                'n_exemplos': n_exemplos,
-                                'thr': thr,
-                                'precisao': precision(y_v, y_p),
-                                'cobertura': recall(y_v, y_p),
-                                'medida_f': medida_f(y_v, y_p),
-                            }
                             if bool_val:
-                                soma_p_prop.append(row['precisao'])
-                                soma_c_prop.append(row['cobertura'])
-                                soma_f_prop.append(row['medida_f'])
+                                for n_vizinho in LISTA_N_VIZINHOS:
+                                    [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val, thr=thr, n_vizinhos=1, intervalo=intervalo)
+                                    row = {
+                                        'metodo': "PROPOSTO" if bool_val else "BASELINE",
+                                        'n_dimensoes': n_dimensoes,
+                                        'n_classes': n_classes,
+                                        'n_atributos': n_atributos,
+                                        'n_exemplos': n_exemplos,
+                                        'precisao': precision(y_v, y_p),
+                                        'cobertura': recall(y_v, y_p),
+                                        'medida_f': medida_f(y_v, y_p),
+                                    }
+                                    if n_vizinho == LISTA_N_VIZINHOS[0]:
+                                        media_f_prop_k1.append(row['medida_f'])
+                                    elif n_vizinho == LISTA_N_VIZINHOS[1]:
+                                        media_f_prop_k2.append(row['medida_f'])
+                                    elif n_vizinho == LISTA_N_VIZINHOS[2]:
+                                        media_f_prop_k3.append(row['medida_f'])
+                                    writer.writerow(row)
+                                    print(row)
                             else:
-                                soma_p_base.append(row['precisao'])
-                                soma_c_base.append(row['cobertura'])
-                                soma_f_base.append(row['medida_f'])
-                            writer.writerow(row)
-                            print(row)
+                                [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val, thr=thr, intervalo=intervalo)
+                                row = {
+                                    'metodo': "PROPOSTO" if bool_val else "BASELINE",
+                                    'n_dimensoes': n_dimensoes,
+                                    'n_classes': n_classes,
+                                    'n_atributos': n_atributos,
+                                    'n_exemplos': n_exemplos,                                    
+                                    'precisao': precision(y_v, y_p),
+                                    'cobertura': recall(y_v, y_p),
+                                    'medida_f': medida_f(y_v, y_p),
+                                }
+                                media_f_base.append(row['medida_f'])
+                                writer.writerow(row)
+                                print(row)
 
 print("Finalizando overall de make_multilabel...")
 with open('resultados/make_multilabel/' + str(date.today()) + '_' + str(timestamp) + '_' + '_overall.csv', 'w') as tabela:
     writer = csv.DictWriter(tabela, fieldnames=[
-        'soma_p_prop',
-        'soma_c_prop',
-        'soma_f_prop',
-        'soma_p_base',
-        'soma_c_base',
-        'soma_f_base'
+        'media_f_base',
+        'media_f_prop_k1',
+        'media_f_prop_k2',
+        'media_f_prop_k2'
         ])
     writer.writeheader()
     row = {
-        'soma_p_prop': sum(soma_p_prop)/len(soma_p_prop),
-        'soma_c_prop': sum(soma_c_prop)/len(soma_c_prop),
-        'soma_f_prop': sum(soma_f_prop)/len(soma_f_prop),
-        'soma_p_base': sum(soma_p_base)/len(soma_p_base),
-        'soma_c_base': sum(soma_c_base)/len(soma_c_base),
-        'soma_f_base': sum(soma_f_base)/len(soma_f_base),
+        'media_f_base': sum(media_f_base)/len(media_f_base),
+        'media_f_prop_k1': sum(media_f_prop_k1)/len(media_f_prop_k1),
+        'media_f_prop_k2': sum(media_f_prop_k2)/len(media_f_prop_k2),
+        'media_f_prop_k2': sum(media_f_prop_k2)/len(media_f_prop_k2)
     }
     writer.writerow(row)
     print(row)
