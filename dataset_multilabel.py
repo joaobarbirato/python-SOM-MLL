@@ -78,14 +78,14 @@ with open('resultados/make_multilabel/' + str(date.today()) + '_' + str(timestam
         'media_f_base',
         'media_f_prop_k1',
         'media_f_prop_k2',
-        'media_f_prop_k2'
+        'media_f_prop_k3'
         ])
     writer.writeheader()
     row = {
         'media_f_base': sum(media_f_base)/len(media_f_base),
         'media_f_prop_k1': sum(media_f_prop_k1)/len(media_f_prop_k1),
         'media_f_prop_k2': sum(media_f_prop_k2)/len(media_f_prop_k2),
-        'media_f_prop_k2': sum(media_f_prop_k2)/len(media_f_prop_k2)
+        'media_f_prop_k3': sum(media_f_prop_k3)/len(media_f_prop_k3)
     }
     writer.writerow(row)
     print(row)
