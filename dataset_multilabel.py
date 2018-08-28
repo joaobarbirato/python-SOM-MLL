@@ -37,7 +37,7 @@ with open('resultados/make_multilabel/' + str(date.today()) + '_' + str(timestam
                             thr = (intervalo[1]+intervalo[0])/2
                             if bool_val:
                                 for n_vizinho in LISTA_N_VIZINHOS:
-                                    [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val, thr=thr, n_vizinhos=1, intervalo=intervalo)
+                                    [y_v,y_p] = train_test_kfold(10,True,None,som,x,y,vizinhos=bool_val, thr=thr, n_vizinhos=n_vizinho, intervalo=intervalo)
                                     row = {
                                         'metodo': "PROPOSTO" if bool_val else "BASELINE",
                                         'n_dimensoes': n_dimensoes,
